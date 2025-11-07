@@ -1,0 +1,6 @@
+include README.md
+include LICENSE
+include requirements.txt
+recursive-include vnlunar *.py
+recursive-include examples *.py
+recursive-include examples *.md
