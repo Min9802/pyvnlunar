@@ -218,7 +218,7 @@ Free for personal and non-commercial use.
 
 ## Version
 
-Current version: **1.0.2**
+Current version: **1.0.3**
 
 ## Credits
 
@@ -227,7 +227,8 @@ Current version: **1.0.2**
 
 ## Liên hệ / Contact
 
-- GitHub Issues: [https://github.com/min9802/vnlunar/issues](https://github.com/min9802/vnlunar/issues)
+- **Website**: https://vnlunar.min-services.com
+- GitHub Issues: [https://github.com/min9802/pyvnlunar/issues](https://github.com/min9802/pyvnlunar/issues)
 
 ---
 

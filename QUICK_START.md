@@ -159,5 +159,5 @@ MIT License - Free for personal and non-commercial use
 ---
 
 **Status**: ✅ Core implementation complete and tested
-**Version**: 1.0.2  
+**Version**: 1.0.3  
 **Date**: November 2025
