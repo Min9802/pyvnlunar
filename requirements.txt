@@ -1,0 +1,13 @@
+# vnlunar không yêu cầu dependencies bên ngoài
+# No external dependencies required
+
+# Chỉ cần Python >= 3.7
+# Python >= 3.7 only
+
+# Để phát triển (optional):
+# For development (optional):
+# pytest>=7.0
+# pytest-cov>=4.0
+# black>=22.0
+# flake8>=5.0
+# mypy>=0.990
