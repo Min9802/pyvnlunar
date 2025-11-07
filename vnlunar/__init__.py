@@ -9,7 +9,7 @@ Author: Converted from TypeScript vnlunar
 License: Free for personal and non-commercial use
 """
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 __author__ = "vnlunar"
 
 # Try relative imports first, fallback to absolute imports

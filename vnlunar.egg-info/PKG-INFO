@@ -1,10 +1,10 @@
 Metadata-Version: 2.4
 Name: vnlunar
-Version: 1.0.0
+Version: 1.0.4
 Summary: Vietnamese Lunar Calendar Library for Python - Thư viện Âm lịch Việt Nam
-Home-page: https://github.com/min9802/vnlunar
-Author: Your Name
-Author-email: your.email@example.com
+Home-page: https://github.com/min9802/pyvnlunar
+Author: Min
+Author-email: hieumin9802@gmail.com
 Project-URL: Bug Reports, https://github.com/yourusername/vnlunar/issues
 Project-URL: Source, https://github.com/yourusername/vnlunar
 Project-URL: Documentation, https://github.com/yourusername/vnlunar#readme
@@ -70,8 +70,8 @@ pip install vnlunar
 Hoặc cài đặt từ source:
 
 ```bash
-git clone https://github.com/yourusername/vnlunar.git
-cd vnlunar
+git clone https://github.com/min9802/pyvnlunar.git
+cd pyvnlunar
 pip install -e .
 ```
 
@@ -98,11 +98,11 @@ info = vnlunar.get_full_info(7, 11, 2025)
 
 print(f"Dương lịch: {info['solar']['day']}/{info['solar']['month']}/{info['solar']['year']}")
 print(f"Âm lịch: {info['lunar']['day']}/{info['lunar']['month']}/{info['lunar']['year']}")
-print(f"Can Chi ngày: {info['can_chi']['ngay']}")
-print(f"Can Chi tháng: {info['can_chi']['thang']}")
-print(f"Can Chi năm: {info['can_chi']['nam']}")
-print(f"Sao: {info['sao_12_kien_tru']['name']} - {info['sao_12_kien_tru']['desc']}")
-print(f"Hoàng/Hắc Đạo: {info['hoang_hac_dao']['type']}")
+print(f"Can Chi ngày: {info['can_chi']['day']}")
+print(f"Can Chi tháng: {info['can_chi']['month']}")
+print(f"Can Chi năm: {info['can_chi']['year']}")
+print(f"Sao: {info['12_stars']['name']} - {info['12_stars']['description']}")
+print(f"Hoàng/Hắc Đạo: {info['day_type']['type']}")
 ```
 
 ### 3. Xem ngày tốt xấu cho các việc
@@ -114,17 +114,17 @@ import vnlunar
 jd = vnlunar.jdn(7, 11, 2025)
 
 # Xem ngày có tốt cho cưới hỏi không
-ket_qua = vnlunar.xem_ngay(jd, "cuoi")
-print(f"Ngày {ket_qua['sao']['name']}: {ket_qua['description']}")
+ket_qua = vnlunar.check_good_day(jd, "wedding")
+print(f"Ngày {ket_qua['star']['name']}: {ket_qua['description']}")
 
 # Tìm các ngày tốt để khai trương trong tháng 11/2025
 start_jd = vnlunar.jdn(1, 11, 2025)
 end_jd = vnlunar.jdn(30, 11, 2025)
-ngay_tot = vnlunar.tim_ngay_tot(start_jd, end_jd, "khaotruong")
+ngay_tot = vnlunar.find_good_days(start_jd, end_jd, "opening")
 
 print(f"\nCác ngày tốt để khai trương trong tháng 11/2025:")
 for ngay in ngay_tot:
-    print(f"  {ngay['solar']['day']}/{ngay['solar']['month']}/{ngay['solar']['year']} - Sao {ngay['sao']['name']}")
+    print(f"  {ngay['solar']['day']}/{ngay['solar']['month']}/{ngay['solar']['year']} - Sao {ngay['star']['name']}")
 ```
 
 ### 4. Kiểm tra tuổi xung
@@ -136,14 +136,14 @@ jd = vnlunar.jdn(7, 11, 2025)
 nam_sinh = 1990
 
 # Kiểm tra tuổi có xung không
-xung = vnlunar.check_tuoi_xung(jd, nam_sinh)
+xung = vnlunar.check_age_conflict(jd, nam_sinh)
 print(f"Năm sinh {nam_sinh} xung với ngày này: {'Có' if xung else 'Không'}")
 
 # Lấy thông tin chi tiết về tuổi xung
-tuoi_xung_info = vnlunar.get_tuoi_xung(jd, 2025)
+tuoi_xung_info = vnlunar.get_conflicting_ages(jd, 2025)
 print(f"\n{tuoi_xung_info['description']}")
 print(f"Các tuổi xung trong ngày này:")
-for tuoi in tuoi_xung_info['tuoi_xung_list'][:5]:
+for tuoi in tuoi_xung_info['ages'][:5]:
     print(f"  Tuổi {tuoi['age']}: {tuoi['can_chi']} ({tuoi['animal']})")
 ```
 
@@ -155,18 +155,18 @@ import vnlunar
 jd = vnlunar.jdn(7, 11, 2025)
 
 # Hướng theo ngày
-huong_ngay = vnlunar.get_ngoc_hap_thong_thu(jd)
-print(f"Hướng tốt: {huong_ngay['huong_tot_text']}")
-print(f"Hướng xấu: {huong_ngay['huong_xau_text']}")
+huong_ngay = vnlunar.get_direction_info(jd)
+print(f"Hướng tốt: {', '.join(huong_ngay['good_directions'])}")
+print(f"Hướng xấu: {', '.join(huong_ngay['bad_directions'])}")
 
 # Hướng theo tuổi
-huong_tuoi = vnlunar.get_huong_xuat_hanh_theo_tuoi(1990, 2025)
-print(f"\nTuổi: {huong_tuoi['tuoi']} ({huong_tuoi['chi']})")
-print(f"Hướng tốt: {huong_tuoi['huong_tot_text']}")
+huong_tuoi = vnlunar.get_age_direction(1990, 2025)
+print(f"\nTuổi: {huong_tuoi['age']} ({huong_tuoi['zodiac']})")
+print(f"Hướng tốt: {', '.join(huong_tuoi['good_directions'])}")
 
 # Hướng kết hợp
-huong_xuat_hanh = vnlunar.get_huong_xuat_hanh(jd, 1990, 2025)
-print(f"\n{huong_xuat_hanh['loi_khuyen']}")
+huong_xuat_hanh = vnlunar.get_travel_direction(jd, 1990, 2025)
+print(f"\n{huong_xuat_hanh['advice']}")
 ```
 
 ### 6. Giờ Hoàng Đạo
@@ -177,23 +177,24 @@ import vnlunar
 jd = vnlunar.jdn(7, 11, 2025)
 
 # Lấy các giờ Hoàng Đạo trong ngày
-gio_hoang_dao = vnlunar.get_gio_hoang_dao(jd)
+gio_hoang_dao = vnlunar.get_auspicious_hours(jd)
 print("Giờ Hoàng Đạo:")
-print(gio_hoang_dao)
+for hour in gio_hoang_dao:
+    print(f"  {hour['hour_name']}: {hour['time_range']}")
 
 # Kiểm tra một giờ cụ thể
-gio_info = vnlunar.kiem_tra_gio_xuat_hanh(jd, "Tý")
-print(f"\nGiờ {gio_info['chi']} ({gio_info['khung']}): {'TỐT' if gio_info['tot'] else 'XẤU'}")
+gio_info = vnlunar.check_travel_hour(jd, "Tý")
+print(f"\nGiờ {gio_info['zodiac_hour']}: {'TỐT' if gio_info['is_good'] else 'XẤU'}")
 ```
 
 ## Các loại việc hỗ trợ xem ngày
 
-- `"cuoi"`: Cưới hỏi
-- `"xaynha"`: Xây nhà
-- `"xuathanh"`: Xuất hành
-- `"khaotruong"`: Khai trương
-- `"chuyennha"`: Chuyển nhà
-- `"dautu"`: Đầu tư
+- `"wedding"`: Cưới hỏi
+- `"building"`: Xây nhà
+- `"travel"`: Xuất hành
+- `"opening"`: Khai trương
+- `"moving"`: Chuyển nhà
+- `"investing"`: Đầu tư
 
 ## API Reference
 
@@ -208,30 +209,30 @@ print(f"\nGiờ {gio_info['chi']} ({gio_info['khung']}): {'TỐT' if gio_info['t
 
 - `get_can_chi(lunar)`: Lấy Can Chi của ngày, tháng, năm
 - `get_year_can_chi(year)`: Lấy Can Chi của năm
-- `get_year_ngu_hanh(year)`: Lấy Ngũ Hành của năm
-- `get_gio_hoang_dao(jd)`: Lấy giờ Hoàng Đạo
+- `get_year_element(year)`: Lấy Ngũ Hành của năm
+- `get_auspicious_hours(jd)`: Lấy giờ Hoàng Đạo
 - `get_day_of_week(jd)`: Lấy thứ trong tuần
 
 ### Astrology Functions
 
-- `get_12_sao(lunar_day, lunar_month)`: Lấy 12 Sao Kiến Trừ
-- `get_12_than(jd)`: Lấy 12 Thần
-- `get_thap_nhi_truc(lunar_day, lunar_month)`: Lấy Thập Nhị Trực
-- `get_28_tu_sao(jd)`: Lấy 28 Tú Sao
-- `get_nap_am(jd)`: Lấy Nạp Âm
-- `get_hoang_hac_dao(lunar_day, lunar_month)`: Kiểm tra Hoàng Đạo/Hắc Đạo
-- `xem_ngay(jd, viec)`: Xem ngày tốt xấu cho việc
-- `tim_ngay_tot(start_jd, end_jd, viec)`: Tìm các ngày tốt
+- `get_12_stars(lunar_day, lunar_month)`: Lấy 12 Sao Kiến Trừ
+- `get_12_gods(jd)`: Lấy 12 Thần Hoàng Đạo/Hắc Đạo
+- `get_12_constructions(lunar_day, lunar_month)`: Lấy Thập Nhị Trực
+- `get_28_mansions(jd)`: Lấy 28 Tú Sao
+- `get_nayin(jd)`: Lấy Nạp Âm
+- `get_day_type(lunar_day, lunar_month)`: Kiểm tra Hoàng Đạo/Hắc Đạo
+- `check_good_day(jd, activity)`: Xem ngày tốt xấu cho việc
+- `find_good_days(start_jd, end_jd, activity)`: Tìm các ngày tốt
 
 ### Direction Functions
 
-- `get_tuoi_xung(jd, current_year)`: Lấy thông tin tuổi xung
-- `check_tuoi_xung(jd, birth_year)`: Kiểm tra tuổi xung
-- `get_ngoc_hap_thong_thu(jd)`: Lấy hướng theo Ngọc Hạp Thông Thư
-- `get_huong_than_theo_ngay(jd)`: Lấy hướng thần
-- `get_huong_xuat_hanh_theo_tuoi(birth_year, current_year)`: Hướng theo tuổi
-- `get_huong_xuat_hanh(jd, birth_year, current_year)`: Hướng xuất hành tổng hợp
-- `kiem_tra_gio_xuat_hanh(jd, chi_gio)`: Kiểm tra giờ xuất hành
+- `get_conflicting_ages(jd, current_year)`: Lấy thông tin tuổi xung
+- `check_age_conflict(jd, birth_year)`: Kiểm tra tuổi xung
+- `get_direction_info(jd)`: Lấy hướng theo Ngọc Hạp Thông Thư
+- `get_god_directions(jd)`: Lấy hướng thần (Thần Tài, Hỷ Thần, Phúc Thần)
+- `get_age_direction(birth_year, current_year)`: Hướng theo tuổi
+- `get_travel_direction(jd, birth_year, current_year)`: Hướng xuất hành tổng hợp
+- `check_travel_hour(jd, zodiac_hour)`: Kiểm tra giờ xuất hành
 
 ### Main Function
 
@@ -262,15 +263,19 @@ Mọi đóng góp đều được hoan nghênh! Vui lòng:
 
 Free for personal and non-commercial use.
 
+## Version
+
+Current version: **1.0.4**
+
 ## Credits
 
 - Dựa trên thuật toán thiên văn của Ho Ngoc Duc
-- Converted from TypeScript vnlunar library
 - Tham khảo: "Lịch Việt Nam - Nguyên lý và các bảng tra cứu" - Hoàng Xuân Hãn
 
 ## Liên hệ / Contact
 
-- GitHub Issues: [https://github.com/min9802/vnlunar/issues](https://github.com/min9802/vnlunar/issues)
+- **Website**: https://vnlunar.min-services.com
+- GitHub Issues: [https://github.com/min9802/pyvnlunar/issues](https://github.com/min9802/pyvnlunar/issues)
 
 ---
 
