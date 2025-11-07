@@ -90,7 +90,7 @@ def get_28_mansions(jd: int) -> Mansion28Info:
     Returns:
         Mansion information / Thông tin tú sao
     """
-    mansion_index = (jd + 15) % 28
+    mansion_index = (jd + 11) % 28
     return MANSIONS_28[mansion_index]
 
 
