@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="vnlunar",
-    version="1.0.2",
+    version="1.0.3",
     author="Min",
     author_email="hieumin9802@gmail.com",
     description="Vietnamese Lunar Calendar Library for Python - Thư viện Âm lịch Việt Nam",
