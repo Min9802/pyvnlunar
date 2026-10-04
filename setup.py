@@ -42,9 +42,9 @@ setup(
         ],
     },
     project_urls={
-        "Bug Reports": "https://github.com/yourusername/vnlunar/issues",
-        "Source": "https://github.com/yourusername/vnlunar",
-        "Documentation": "https://github.com/yourusername/vnlunar#readme",
+        "Bug Reports": "https://github.com/Min9802/vnlunar/issues",
+        "Source": "https://github.com/Min9802/vnlunar",
+        "Documentation": "https://github.com/Min9802/vnlunar#readme",
     },
     include_package_data=True,
     zip_safe=False,
