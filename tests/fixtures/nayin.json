@@ -1,0 +1,365 @@
+{
+ "source": "Lục thập hoa giáp nạp âm (standard)",
+ "items": [
+  {
+   "index": 0,
+   "can_chi": "Giáp Tý",
+   "name": "Hải Trung Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 1,
+   "can_chi": "Ất Sửu",
+   "name": "Hải Trung Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 2,
+   "can_chi": "Bính Dần",
+   "name": "Lư Trung Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 3,
+   "can_chi": "Đinh Mão",
+   "name": "Lư Trung Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 4,
+   "can_chi": "Mậu Thìn",
+   "name": "Đại Lâm Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 5,
+   "can_chi": "Kỷ Tỵ",
+   "name": "Đại Lâm Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 6,
+   "can_chi": "Canh Ngọ",
+   "name": "Lộ Bàng Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 7,
+   "can_chi": "Tân Mùi",
+   "name": "Lộ Bàng Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 8,
+   "can_chi": "Nhâm Thân",
+   "name": "Kiếm Phong Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 9,
+   "can_chi": "Quý Dậu",
+   "name": "Kiếm Phong Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 10,
+   "can_chi": "Giáp Tuất",
+   "name": "Sơn Đầu Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 11,
+   "can_chi": "Ất Hợi",
+   "name": "Sơn Đầu Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 12,
+   "can_chi": "Bính Tý",
+   "name": "Giản Hạ Thủy",
+   "element": "Thủy"
+  },
+  {
+   "index": 13,
+   "can_chi": "Đinh Sửu",
+   "name": "Giản Hạ Thủy",
+   "element": "Thủy"
+  },
+  {
+   "index": 14,
+   "can_chi": "Mậu Dần",
+   "name": "Thành Đầu Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 15,
+   "can_chi": "Kỷ Mão",
+   "name": "Thành Đầu Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 16,
+   "can_chi": "Canh Thìn",
+   "name": "Bạch Lạp Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 17,
+   "can_chi": "Tân Tỵ",
+   "name": "Bạch Lạp Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 18,
+   "can_chi": "Nhâm Ngọ",
+   "name": "Dương Liễu Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 19,
+   "can_chi": "Quý Mùi",
+   "name": "Dương Liễu Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 20,
+   "can_chi": "Giáp Thân",
+   "name": "Tuyền Trung Thủy",
+   "element": "Thủy"
+  },
+  {
+   "index": 21,
+   "can_chi": "Ất Dậu",
+   "name": "Tuyền Trung Thủy",
+   "element": "Thủy"
+  },
+  {
+   "index": 22,
+   "can_chi": "Bính Tuất",
+   "name": "Ốc Thượng Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 23,
+   "can_chi": "Đinh Hợi",
+   "name": "Ốc Thượng Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 24,
+   "can_chi": "Mậu Tý",
+   "name": "Tích Lịch Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 25,
+   "can_chi": "Kỷ Sửu",
+   "name": "Tích Lịch Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 26,
+   "can_chi": "Canh Dần",
+   "name": "Tòng Bách Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 27,
+   "can_chi": "Tân Mão",
+   "name": "Tòng Bách Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 28,
+   "can_chi": "Nhâm Thìn",
+   "name": "Trường Lưu Thủy",
+   "element": "Thủy"
+  },
+  {
+   "index": 29,
+   "can_chi": "Quý Tỵ",
+   "name": "Trường Lưu Thủy",
+   "element": "Thủy"
+  },
+  {
+   "index": 30,
+   "can_chi": "Giáp Ngọ",
+   "name": "Sa Trung Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 31,
+   "can_chi": "Ất Mùi",
+   "name": "Sa Trung Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 32,
+   "can_chi": "Bính Thân",
+   "name": "Sơn Hạ Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 33,
+   "can_chi": "Đinh Dậu",
+   "name": "Sơn Hạ Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 34,
+   "can_chi": "Mậu Tuất",
+   "name": "Bình Địa Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 35,
+   "can_chi": "Kỷ Hợi",
+   "name": "Bình Địa Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 36,
+   "can_chi": "Canh Tý",
+   "name": "Bích Thượng Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 37,
+   "can_chi": "Tân Sửu",
+   "name": "Bích Thượng Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 38,
+   "can_chi": "Nhâm Dần",
+   "name": "Kim Bạc Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 39,
+   "can_chi": "Quý Mão",
+   "name": "Kim Bạc Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 40,
+   "can_chi": "Giáp Thìn",
+   "name": "Phúc Đăng Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 41,
+   "can_chi": "Ất Tỵ",
+   "name": "Phúc Đăng Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 42,
+   "can_chi": "Bính Ngọ",
+   "name": "Thiên Hà Thủy",
+   "element": "Thủy"
+  },
+  {
+   "index": 43,
+   "can_chi": "Đinh Mùi",
+   "name": "Thiên Hà Thủy",
+   "element": "Thủy"
+  },
+  {
+   "index": 44,
+   "can_chi": "Mậu Thân",
+   "name": "Đại Trạch Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 45,
+   "can_chi": "Kỷ Dậu",
+   "name": "Đại Trạch Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 46,
+   "can_chi": "Canh Tuất",
+   "name": "Thoa Xuyến Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 47,
+   "can_chi": "Tân Hợi",
+   "name": "Thoa Xuyến Kim",
+   "element": "Kim"
+  },
+  {
+   "index": 48,
+   "can_chi": "Nhâm Tý",
+   "name": "Tang Đố Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 49,
+   "can_chi": "Quý Sửu",
+   "name": "Tang Đố Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 50,
+   "can_chi": "Giáp Dần",
+   "name": "Đại Khê Thủy",
+   "element": "Thủy"
+  },
+  {
+   "index": 51,
+   "can_chi": "Ất Mão",
+   "name": "Đại Khê Thủy",
+   "element": "Thủy"
+  },
+  {
+   "index": 52,
+   "can_chi": "Bính Thìn",
+   "name": "Sa Trung Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 53,
+   "can_chi": "Đinh Tỵ",
+   "name": "Sa Trung Thổ",
+   "element": "Thổ"
+  },
+  {
+   "index": 54,
+   "can_chi": "Mậu Ngọ",
+   "name": "Thiên Thượng Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 55,
+   "can_chi": "Kỷ Mùi",
+   "name": "Thiên Thượng Hỏa",
+   "element": "Hỏa"
+  },
+  {
+   "index": 56,
+   "can_chi": "Canh Thân",
+   "name": "Thạch Lựu Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 57,
+   "can_chi": "Tân Dậu",
+   "name": "Thạch Lựu Mộc",
+   "element": "Mộc"
+  },
+  {
+   "index": 58,
+   "can_chi": "Nhâm Tuất",
+   "name": "Đại Hải Thủy",
+   "element": "Thủy"
+  },
+  {
+   "index": 59,
+   "can_chi": "Quý Hợi",
+   "name": "Đại Hải Thủy",
+   "element": "Thủy"
+  }
+ ]
+}

@@ -3,7 +3,7 @@ Type definitions for vnlunar library
 Các định nghĩa kiểu dữ liệu cho thư viện vnlunar
 """
 
-from typing import TypedDict, Literal, List
+from typing import TypedDict, Literal, List, Dict
 
 # Type aliases
 Element = Literal["Thủy", "Hỏa", "Mộc", "Kim", "Thổ"]  # Water, Fire, Wood, Metal, Earth
@@ -55,35 +55,39 @@ class YearElementInfo(TypedDict):
 
 
 class Star12Info(TypedDict):
-    """12 Day Officers information (12 Sao Kiến Trừ)"""
+    """Thập Nhị Trực (tóm tắt) / 12 Day Officers"""
     name: str
     status: StarStatus
     color: str
-    desc: str
+    description: str
 
 
-class God12Info(TypedDict):
+class God12Info(TypedDict, total=False):
     """12 Gods information (Hoàng Đạo / Hắc Đạo)"""
     name: str
+    alias: str  # Tên gọi khác (vd. Thiên Đức = Bảo Quang)
     type: GodType
     status: StarStatus
-    desc: str
+    description: str
 
 
 class Construction12Info(TypedDict):
     """12 Day Constructions information (Thập Nhị Trực)"""
-    name: str
-    should_do: List[str]  # Things should do
-    should_not_do: List[str]  # Things should not do
+    name: str  # vd. "Trực Kiến"
+    short_name: str  # vd. "Kiến"
+    status: StarStatus
+    good_for: List[str]  # Việc nên làm
+    bad_for: List[str]  # Việc nên tránh
 
 
 class Mansion28Info(TypedDict):
-    """28 Lunar Mansions information (28 Tú Sao)"""
+    """28 Lunar Mansions information (Nhị Thập Bát Tú)"""
     name: str
+    full_name: str  # vd. "Giác Mộc Giao"
     animal: str  # Associated animal
-    element: str  # Associated element
+    element: str  # Thất Diệu
     good: bool  # Is it auspicious?
-    desc: str
+    description: str
 
 
 class NayinInfo(TypedDict):
@@ -143,7 +147,8 @@ class HourInfo(TypedDict):
 
 class DaySelectionResult(TypedDict):
     """Day selection result for activities"""
-    star: Star12Info
+    star: Star12Info  # Trực
+    god: God12Info  # Thần trực nhật
     activity: str
     good: bool
     description: str

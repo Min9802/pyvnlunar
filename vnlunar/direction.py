@@ -13,6 +13,8 @@ try:
         CHI, CHI_ANIMALS, CAN, DIRECTION_MAP,
         WEALTH_GOD_DIR, JOY_GOD_DIR, FORTUNE_GOD_DIR
     )
+    from .astrology import get_nayin_by_can_chi
+    from .calendar import get_element_relation
 except ImportError:
     from lunar_types import (
         ConflictingAgeInfo, DirectionInfo, GodDirectionInfo, HourInfo
@@ -21,55 +23,71 @@ except ImportError:
         CHI, CHI_ANIMALS, CAN, DIRECTION_MAP,
         WEALTH_GOD_DIR, JOY_GOD_DIR, FORTUNE_GOD_DIR
     )
+    from astrology import get_nayin_by_can_chi
+    from calendar import get_element_relation
 
 
 def get_conflicting_ages(jd: int, current_year: int) -> ConflictingAgeInfo:
     """
-    Get age conflict information (Tuổi Xung)
+    Get age conflict information (Tuổi Xung ngày)
     Lấy thông tin tuổi xung
+
+    Quy tắc (khớp các lịch vạn niên đối chiếu, mới khớp một phần - xem docs/tuoi-xung.md):
+    (A) Tuổi xung chính (*): Chi lục xung với chi ngày VÀ Nạp Âm khắc / bị khắc Nạp Âm ngày.
+    (B) Tuổi xung phụ: cùng chi ngày, Can bị Can ngày khắc (Can ngày + 4) VÀ Nạp Âm khắc / bị khắc.
     
     Args:
         jd: Julian Day Number
-        current_year: Current year / Năm hiện tại
+        current_year: Năm dùng để tính tuổi (nên truyền năm âm lịch)
         
     Returns:
         ConflictingAgeInfo dictionary
     """
+    day_can = (jd + 9) % 10
     day_chi = (jd + 1) % 12
-    chi_name = CHI[day_chi]
-    animal_name = CHI_ANIMALS[day_chi]
-    
-    # Conflicting chi is opposite (6 positions away)
     conflict_chi_index = (day_chi + 6) % 12
-    conflict_chi = CHI[conflict_chi_index]
-    conflict_animal = CHI_ANIMALS[conflict_chi_index]
-    
-    # Calculate conflicting ages
+    day_nayin = get_nayin_by_can_chi(day_can, day_chi)
+
+    def is_khac(can_index: int, chi_index: int) -> bool:
+        other = get_nayin_by_can_chi(can_index, chi_index)['element']
+        rel = get_element_relation(day_nayin['element'], other).lower()
+        return rel in ("khắc", "bị khắc")
+
+    candidates = []
+    # (A) Chi xung + Nạp Âm khắc
+    for can in range(conflict_chi_index % 2, 10, 2):
+        if is_khac(can, conflict_chi_index):
+            candidates.append((can, conflict_chi_index, True, "Địa chi xung, Nạp Âm khắc"))
+    # (B) Cùng chi, Can bị khắc + Nạp Âm khắc
+    can_bi_khac = (day_can + 4) % 10
+    if is_khac(can_bi_khac, day_chi):
+        candidates.append((can_bi_khac, day_chi, False, "Cùng chi, Thiên can khắc, Nạp Âm khắc"))
+
     conflicting_age_list = []
-    for i in range(1, 100):
-        year = current_year - i
-        year_chi = (year + 8) % 12
-        if year_chi == conflict_chi_index:
-            can_index = (year + 6) % 10
-            conflicting_age_list.append({
-                'year': year,
-                'can_chi': f"{CAN[can_index]} {CHI[year_chi]}",
-                'age': i,
-                'chi': CHI[year_chi],
-                'animal': CHI_ANIMALS[year_chi]
-            })
-    
-    description = f"Ngày {chi_name} ({animal_name}) xung với tuổi {conflict_chi} ({conflict_animal})"
-    note = "Người tuổi xung nên tránh làm việc quan trọng trong ngày này"
-    
+    for can, chi, primary, reason in candidates:
+        year = current_year - 1
+        while (year + 6) % 10 != can or (year + 8) % 12 != chi:
+            year -= 1
+        can_chi = f"{CAN[can]} {CHI[chi]}"
+        conflicting_age_list.append({
+            'year': year,
+            'can_chi': can_chi + ("*" if primary else ""),
+            'age': current_year - year,
+            'chi': CHI[chi],
+            'animal': CHI_ANIMALS[chi],
+            'primary': primary,
+            'reason': reason
+        })
+
+    names = ", ".join(a['can_chi'].replace("*", "") for a in conflicting_age_list)
     return {
-        'day_chi': chi_name,
-        'day_animal': animal_name,
-        'conflict_chi': conflict_chi,
-        'conflict_animal': conflict_animal,
-        'description': description,
-        'conflicting_ages': conflicting_age_list[:12],  # Only return first 12 ages
-        'note': note
+        'day_chi': CHI[day_chi],
+        'day_animal': CHI_ANIMALS[day_chi],
+        'conflict_chi': CHI[conflict_chi_index],
+        'conflict_animal': CHI_ANIMALS[conflict_chi_index],
+        'description': f"Ngày {CAN[day_can]} {CHI[day_chi]} ({day_nayin['name']}) xung với tuổi: {names}",
+        'conflicting_ages': conflicting_age_list,
+        'note': f"Người tuổi {CHI_ANIMALS[conflict_chi_index]} nên cẩn thận trong ngày này"
     }
 
 
@@ -96,6 +114,8 @@ def get_direction_info(jd: int) -> DirectionInfo:
     """
     Get direction information according to Ngoc Hap Thong Thu
     Lấy thông tin hướng theo Ngọc Hạp Thông Thư
+
+    THỰC NGHIỆM: bảng hướng theo chi ngày chưa có nguồn đối chiếu, không còn đưa vào get_full_info.
     
     Args:
         jd: Julian Day Number
@@ -116,6 +136,7 @@ def get_direction_info(jd: int) -> DirectionInfo:
     
     return {
         'day_chi': day_chi,
+        'chi': day_chi,  # Alias
         'good': good_directions,
         'bad': bad_directions,
         'description': description,
@@ -127,7 +148,7 @@ def get_direction_info(jd: int) -> DirectionInfo:
 def get_god_directions(jd: int) -> GodDirectionInfo:
     """
     Get gods direction by day
-    Lấy hướng thần theo ngày
+    Lấy hướng thần theo ngày (Hỷ Thần, Tài Thần đã đối chiếu; Phúc Thần chưa đối chiếu)
     
     Args:
         jd: Julian Day Number
@@ -146,6 +167,7 @@ def get_god_directions(jd: int) -> GodDirectionInfo:
     
     return {
         'day_can': day_can,
+        'can': day_can,  # Alias
         'joy_god': joy_god,
         'wealth_god': wealth_god,
         'fortune_god': fortune_god,
@@ -156,7 +178,7 @@ def get_god_directions(jd: int) -> GodDirectionInfo:
 def get_age_direction(birth_year: int, current_year: int) -> Dict:
     """
     Get travel direction by age
-    Lấy hướng xuất hành theo tuổi
+    Lấy hướng xuất hành theo tuổi (THỰC NGHIỆM - chưa có nguồn đối chiếu)
     
     Args:
         birth_year: Birth year / Năm sinh
@@ -196,6 +218,7 @@ def get_age_direction(birth_year: int, current_year: int) -> Dict:
     return {
         'age': f"{age} tuổi",
         'chi': age_chi,
+        'animal': CHI_ANIMALS[age_chi_index],
         'birth_year': birth_year,
         'good': directions['good'],
         'bad': directions['bad'],

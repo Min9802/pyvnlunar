@@ -1,0 +1,54 @@
+{
+  "source": "Đối chiếu thủ công với lịch vạn niên phổ biến (lichngaytot, lichvannien...) qua tìm kiếm 10/2026. Quy ước: Trực theo tiết khí, 12 Thần theo tháng âm.",
+  "anchors": [
+    {
+      "solar": [6, 11, 2025],
+      "day_can_chi": "Kỷ Mão"
+    },
+    {
+      "solar": [8, 11, 2025],
+      "lunar": [19, 9, 2025, 0],
+      "day_can_chi": "Tân Tỵ",
+      "month_can_chi": "Bính Tuất",
+      "year_can_chi": "Ất Tỵ",
+      "weekday": "Thứ bảy",
+      "truc": "Phá",
+      "god": "Minh Đường",
+      "day_type": "Hoàng Đạo",
+      "mansion": "Liễu",
+      "nayin": "Bạch Lạp Kim",
+      "joy_god": "Tây Nam",
+      "wealth_god": "Tây Nam",
+      "conflicting_ages": ["Ất Hợi", "Kỷ Hợi", "Ất Tỵ"]
+    },
+    {
+      "solar": [15, 1, 2026],
+      "day_can_chi": "Kỷ Sửu",
+      "truc": "Kiến",
+      "god": "Thiên Đức",
+      "day_type": "Hoàng Đạo",
+      "conflicting_ages_include": ["Đinh Mùi", "Ất Mùi"]
+    },
+    {
+      "solar": [10, 3, 2025],
+      "truc": "Bế",
+      "god": "Thanh Long",
+      "day_type": "Hoàng Đạo",
+      "mansion": "Tâm"
+    },
+    {
+      "solar": [29, 1, 2025],
+      "lunar": [1, 1, 2025, 0],
+      "year_can_chi": "Ất Tỵ"
+    },
+    {
+      "solar": [17, 2, 2026],
+      "lunar": [1, 1, 2026, 0],
+      "year_can_chi": "Bính Ngọ"
+    },
+    {
+      "solar": [25, 7, 2025],
+      "lunar": [1, 6, 2025, 1]
+    }
+  ]
+}

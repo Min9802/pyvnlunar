@@ -5,13 +5,13 @@ Thuật toán thiên văn cho chuyển đổi lịch âm Việt Nam
 """
 
 import math
-from typing import Tuple, List
+from typing import Tuple, List, Optional, Dict
 
 try:
-    from .constants import TK19, TK20, TK21, TK22, PI
+    from .constants import TK19, TK20, TK21, TK22, PI, FIRST_DAY, LAST_DAY
     from .lunar_types import LunarDate
 except ImportError:
-    from constants import TK19, TK20, TK21, TK22, PI
+    from constants import TK19, TK20, TK21, TK22, PI, FIRST_DAY, LAST_DAY
     from lunar_types import LunarDate
 
 
@@ -212,11 +212,16 @@ def convert_solar_to_lunar(dd: int, mm: int, yy: int, time_zone: float) -> Lunar
         LunarDate dictionary
     """
     day_number = jdn(dd, mm, yy)
+    # Tìm k sao cho newMoon(k+1) <= day_number < newMoon(k+2)
+    # (v1.x chỉ thử k+1 rồi k nên có thể ra ngày âm <= 0 ở một số ngày biên)
     k = INT((day_number - 2415021.076998695) / 29.530588853)
     month_start = get_new_moon_day(k + 1, time_zone)
-    
-    if month_start > day_number:
-        month_start = get_new_moon_day(k, time_zone)
+    while month_start > day_number:
+        k -= 1
+        month_start = get_new_moon_day(k + 1, time_zone)
+    while get_new_moon_day(k + 2, time_zone) <= day_number:
+        k += 1
+        month_start = get_new_moon_day(k + 1, time_zone)
     
     a11 = get_lunar_month_11(yy, time_zone)
     b11 = a11
@@ -255,22 +260,150 @@ def convert_solar_to_lunar(dd: int, mm: int, yy: int, time_zone: float) -> Lunar
     }
 
 
-def get_lunar_date(dd: int, mm: int, yyyy: int) -> LunarDate:
+def get_lunar_date(dd: int, mm: int, yyyy: int, time_zone: Optional[float] = None) -> LunarDate:
     """
     Get lunar date from solar date
-    Main conversion function for Vietnam timezone
-    Lấy ngày âm lịch từ ngày dương lịch (múi giờ Việt Nam)
+    Lấy ngày âm lịch từ ngày dương lịch
+
+    - Không truyền ``time_zone`` và ngày nằm trong 25/01/1800..31/12/2199: tra bảng
+      TK19..TK22 của Hồ Ngọc Đức (đúng với lịch đã ban hành, kể cả trước 1968 dùng UTC+8).
+    - Ngoài khoảng đó, hoặc khi truyền ``time_zone``: tính thiên văn.
     
     Args:
         dd: Day
         mm: Month
         yyyy: Year
+        time_zone: (tùy chọn) ép dùng thuật toán thiên văn với múi giờ này
         
     Returns:
         LunarDate dictionary
     """
-    time_zone = 7.0  # Vietnam timezone
+    if time_zone is None:
+        from_table = get_lunar_date_from_table(dd, mm, yyyy)
+        if from_table is not None:
+            return from_table
+        time_zone = 7.0  # Vietnam timezone
     return convert_solar_to_lunar(dd, mm, yyyy, time_zone)
+
+
+def get_lunar_date_from_table(dd: int, mm: int, yyyy: int) -> Optional[LunarDate]:
+    """
+    Tra ngày âm từ bảng TK19..TK22 (1800-2199).
+
+    Returns:
+        LunarDate hoặc None nếu nằm ngoài phạm vi bảng
+    """
+    jd = jdn(dd, mm, yyyy)
+    if jd < FIRST_DAY or jd > LAST_DAY:
+        return None
+    ly = get_year_info(yyyy)
+    if jd < ly[0]['jd']:
+        if yyyy - 1 < 1800:
+            return None
+        ly = get_year_info(yyyy - 1)
+    i = len(ly) - 1
+    while i > 0 and jd < ly[i]['jd']:
+        i -= 1
+    off = jd - ly[i]['jd']
+    return {
+        'day': 1 + off,
+        'month': ly[i]['month'],
+        'year': ly[i]['year'],
+        'leap': ly[i]['leap'],
+        'jd': jd
+    }
+
+
+def _lunar_to_jd_astronomical(lunar_day: int, lunar_month: int, lunar_year: int,
+                              lunar_leap: int, time_zone: float) -> Optional[int]:
+    """Chuyển âm -> JDN bằng thuật toán thiên văn (port từ Hồ Ngọc Đức). None nếu không tồn tại."""
+    if lunar_month < 11:
+        a11 = get_lunar_month_11(lunar_year - 1, time_zone)
+        b11 = get_lunar_month_11(lunar_year, time_zone)
+    else:
+        a11 = get_lunar_month_11(lunar_year, time_zone)
+        b11 = get_lunar_month_11(lunar_year + 1, time_zone)
+    k = INT(0.5 + (a11 - 2415021.076998695) / 29.530588853)
+    off = lunar_month - 11
+    if off < 0:
+        off += 12
+    if b11 - a11 > 365:
+        leap_off = get_leap_month_offset(a11, time_zone)
+        leap_month = leap_off - 2
+        if leap_month < 0:
+            leap_month += 12
+        if lunar_leap != 0 and lunar_month != leap_month:
+            return None
+        elif lunar_leap != 0 or off >= leap_off:
+            off += 1
+    elif lunar_leap != 0:
+        return None
+    month_start = get_new_moon_day(k + off, time_zone)
+    next_month_start = get_new_moon_day(k + off + 1, time_zone)
+    if lunar_day > next_month_start - month_start:
+        return None
+    return month_start + lunar_day - 1
+
+
+_OUT_OF_TABLE = object()
+
+
+def _lunar_to_jd_table(lunar_day: int, lunar_month: int, lunar_year: int, lunar_leap: int):
+    """Chuyển âm -> JDN bằng bảng. None nếu không tồn tại, _OUT_OF_TABLE nếu năm ngoài bảng."""
+    if lunar_year < 1800 or lunar_year > 2199:
+        return _OUT_OF_TABLE
+    ly = get_year_info(lunar_year)
+    lengths = get_year_month_lengths(lunar_year)
+    want_leap = 1 if lunar_leap else 0
+    for i, m in enumerate(ly):
+        if m['month'] == lunar_month and m['leap'] == want_leap:
+            if lunar_day > lengths[i]:
+                return None
+            return m['jd'] + lunar_day - 1
+    return None
+
+
+def convert_lunar_to_solar(lunar_day: int, lunar_month: int, lunar_year: int,
+                           lunar_leap: int = 0,
+                           time_zone: Optional[float] = None) -> Optional[Tuple[int, int, int]]:
+    """
+    Convert lunar date to solar date
+    Chuyển ngày âm lịch sang dương lịch
+
+    Args:
+        lunar_day: Ngày âm (1-30)
+        lunar_month: Tháng âm (1-12)
+        lunar_year: Năm âm
+        lunar_leap: 1 nếu là tháng nhuận
+        time_zone: (tùy chọn) ép dùng thuật toán thiên văn với múi giờ này
+
+    Returns:
+        (day, month, year) hoặc None nếu ngày âm không tồn tại
+    """
+    if lunar_day < 1 or lunar_day > 30 or lunar_month < 1 or lunar_month > 12:
+        return None
+    jd = _OUT_OF_TABLE
+    if time_zone is None:
+        jd = _lunar_to_jd_table(lunar_day, lunar_month, lunar_year, lunar_leap)
+    if jd is _OUT_OF_TABLE:
+        jd = _lunar_to_jd_astronomical(lunar_day, lunar_month, lunar_year, lunar_leap,
+                                       7.0 if time_zone is None else time_zone)
+    return None if jd is None else jdn2date(jd)
+
+
+def get_solar_date(lunar_day: int, lunar_month: int, lunar_year: int,
+                   lunar_leap: int = 0) -> Optional[Dict[str, int]]:
+    """
+    Get solar date from lunar date
+    Lấy ngày dương lịch từ ngày âm lịch
+
+    Returns:
+        {'day', 'month', 'year', 'jd'} hoặc None nếu ngày âm không tồn tại
+    """
+    r = convert_lunar_to_solar(lunar_day, lunar_month, lunar_year, lunar_leap)
+    if r is None:
+        return None
+    return {'day': r[0], 'month': r[1], 'year': r[2], 'jd': jdn(r[0], r[1], r[2])}
 
 
 def sun_longitude(jdn: int) -> float:
@@ -396,16 +529,36 @@ def get_year_info(yyyy: int) -> List[LunarDate]:
     Returns:
         List of LunarDate
     """
+    return decode_lunar_year(yyyy, _get_year_code(yyyy))
+
+
+def _get_year_code(yyyy: int) -> int:
+    """Mã năm trong bảng TK19..TK22"""
+    if yyyy < 1800 or yyyy > 2199:
+        raise ValueError(f"Year {yyyy} is outside the lunar table range 1800-2199")
     if yyyy < 1900:
-        year_code = TK19[yyyy - 1800]
-    elif yyyy < 2000:
-        year_code = TK20[yyyy - 1900]
-    elif yyyy < 2100:
-        year_code = TK21[yyyy - 2000]
-    else:
-        year_code = TK22[yyyy - 2100]
-    
-    return decode_lunar_year(yyyy, year_code)
+        return TK19[yyyy - 1800]
+    if yyyy < 2000:
+        return TK20[yyyy - 1900]
+    if yyyy < 2100:
+        return TK21[yyyy - 2000]
+    return TK22[yyyy - 2100]
+
+
+def get_year_month_lengths(yyyy: int) -> List[int]:
+    """Độ dài (29/30) từng tháng trong năm âm, cùng thứ tự với get_year_info"""
+    k = _get_year_code(yyyy)
+    month_lengths = [29, 30]
+    regular = [0] * 12
+    j = k >> 4
+    for i in range(12):
+        regular[12 - i - 1] = month_lengths[j & 0x1]
+        j >>= 1
+    leap_month = k & 0xf
+    if leap_month == 0:
+        return regular
+    leap_length = month_lengths[(k >> 16) & 0x1]
+    return regular[:leap_month] + [leap_length] + regular[leap_month:]
 
 
 def get_month(mm: int, yy: int) -> List[LunarDate]:

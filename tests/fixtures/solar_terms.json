@@ -1,0 +1,10 @@
+{
+  "source": "Ngày bắt đầu tiết khí theo giờ Việt Nam (UTC+7), đối chiếu lịch thiên văn công bố.",
+  "terms": [
+    { "name": "Lập xuân", "solar": [4, 2, 2024] },
+    { "name": "Xuân phân", "solar": [20, 3, 2024] },
+    { "name": "Đông chí", "solar": [21, 12, 2024] },
+    { "name": "Lập xuân", "solar": [3, 2, 2025] },
+    { "name": "Lập đông", "solar": [7, 11, 2025] }
+  ]
+}
